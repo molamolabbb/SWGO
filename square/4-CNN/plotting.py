@@ -12,6 +12,7 @@ def plottingLossAcc(losses,accuracy,Eb):
     plt.ylabel('losses',fontsize=15)
     plt.legend(fontsize=15,loc="upper right")
     plt.tick_params(axis = 'both', labelsize =15)
+    plt.axis((0,len(losses['train'])+1,0.2,0.75))
     plt.savefig("../plots/accloss/loss_B{}.pdf".format(Eb))
     #plt.show()
 
@@ -23,6 +24,7 @@ def plottingLossAcc(losses,accuracy,Eb):
     plt.ylabel('accuracy',fontsize=15)
     plt.legend(fontsize=15,loc="lower right")
     plt.tick_params(axis = 'both', labelsize =15)
+    plt.axis((0,len(accuracy['train'])+1,0.45,1.0))
     plt.savefig("../plots/accloss/accuracy_B{}.pdf".format(Eb))
     #plt.show()
 
@@ -49,4 +51,5 @@ def roc(y,y_score,correct,total,Eb):
                  va="center", ha="center", size=15, transform=ax.transAxes)
     fig.savefig("../plots/accloss/roc_B{}.pdf".format(Eb))
     #plt.show()
-    print('Accuracy of the network on the {} test images: {} %'.format(len(testloader)*batchsize,100 * correct / total))
+    print('Accuracy of the network on the {} test images: {} %'.format(total, 100 * correct / total))
+
