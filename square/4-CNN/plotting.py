@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.metrics import roc_curve, roc_auc_score, auc
 
-def plottingLossAcc(losses,accuracy,Eb):
+def plottingLossAcc(losses,accuracy,Eb,limitsloss, limitsacc):
   # plotting losses, and accuracy
     plt.figure(figsize=(6.5,4.5))
     plt.plot(range(1,len(losses['train'])+1),losses['train'], 'r',label='train')
@@ -12,7 +12,7 @@ def plottingLossAcc(losses,accuracy,Eb):
     plt.ylabel('losses',fontsize=15)
     plt.legend(fontsize=15,loc="upper right")
     plt.tick_params(axis = 'both', labelsize =15)
-    plt.axis((0,len(losses['train'])+1,0.2,0.75))
+    plt.axis(limitsloss)
     plt.savefig("../plots/accloss/loss_B{}.pdf".format(Eb))
     #plt.show()
 
@@ -24,7 +24,7 @@ def plottingLossAcc(losses,accuracy,Eb):
     plt.ylabel('accuracy',fontsize=15)
     plt.legend(fontsize=15,loc="lower right")
     plt.tick_params(axis = 'both', labelsize =15)
-    plt.axis((0,len(accuracy['train'])+1,0.45,1.0))
+    plt.axis(limitsacc)
     plt.savefig("../plots/accloss/accuracy_B{}.pdf".format(Eb))
     #plt.show()
 

@@ -2,7 +2,7 @@ import torch
 import torchviz
 from torchviz import make_dot
 import os
-os.environ["CUDA_VISIBLE_DEVICES"]="0"
+os.environ["CUDA_VISIBLE_DEVICES"]="3"
 
 def save_model_structure(model,modelnumber):
   device = torch.device('cuda')
