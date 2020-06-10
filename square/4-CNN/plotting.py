@@ -13,6 +13,7 @@ def plottingLossAcc(losses, accuracy, Eb, limitsloss, limitsacc, bestacc):
     plt.legend(fontsize=15,loc="upper right")
     plt.tick_params(axis = 'both', labelsize =15)
     plt.axis(limitsloss)
+    plt.grid(True)
     plt.savefig("../plots/accloss/loss_B{}.pdf".format(Eb))
     #plt.show()
 
@@ -27,6 +28,7 @@ def plottingLossAcc(losses, accuracy, Eb, limitsloss, limitsacc, bestacc):
     plt.axis(limitsacc)
     plt.text(1.3,0.58,'Accuracy : {}%'.format(bestacc), alpha=1,
                  fontsize=15)
+    plt.grid(True)
     plt.savefig("../plots/accloss/accuracy_B{}.pdf".format(Eb))
     #plt.show()
 
@@ -115,6 +117,7 @@ def Draw_Eff_Sig(fpr, tpr, significance, thresholds, newthresholds, n):
     ax.legend(lines, [l.get_label() for l in lines], loc = 'upper left', fontsize=15)
     ax.set_title('Significance and Efficiency',fontsize=20)
     
+    plt.grid(True)
     fig.savefig("../plots/output/significant_B{}.pdf".format(n))
     plt.show()
 
@@ -141,6 +144,8 @@ def CnnOutputs(outputs, labels, n):
     phist = ax.hist(proton,bins=bins,alpha=0.6,label=particle)
     ax.legend(fontsize=15)
     ax.tick_params(axis = 'both', labelsize =15)
+    
+    plt.grid(True)
     fig.savefig("../plots/output/cnn_output_B{}.pdf".format(n))
 
     plt.show()
