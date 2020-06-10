@@ -26,8 +26,8 @@ def plottingLossAcc(losses, accuracy, Eb, limitsloss, limitsacc, bestacc):
     plt.legend(fontsize=15,loc="lower right")
     plt.tick_params(axis = 'both', labelsize =15)
     plt.axis(limitsacc)
-    plt.text(1.3,0.58,'Accuracy : {}%'.format(bestacc), alpha=1,
-                 fontsize=15)
+    plt.text(50,0.58,'Accuracy : {}%'.format(bestacc), alpha=1,
+                va="center", ha="center", fontsize=15)
     plt.grid(True)
     plt.savefig("../plots/accloss/accuracy_B{}.pdf".format(Eb))
     #plt.show()
