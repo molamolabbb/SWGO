@@ -83,44 +83,49 @@ def Draw_Eff_Sig(fpr, tpr, significance, thresholds, newthresholds, n):
     
     fig, ax = plt.subplots(figsize=(6,6))
     
-    fxy = zip(fpr,thresholds)
-    fxy = sorted(fxy, key=lambda b:b[1],reverse=True)
-    fpr, thresholds = zip(*fxy)
-    Feff = ax.plot(sorted(thresholds)[:-1], fpr[:-1], "b-", label=r'$BgEff$')
+    signi = ax.plot(newthresholds, significance, "g-", label= r'$\frac{s}{\sqrt{s+b}}$')
     
+    tax = ax.twinx()
     txy = zip(tpr,thresholds)
     txy = sorted(txy, key=lambda b:b[1],reverse=True)
     tpr, thresholds = zip(*txy)
-    Teff = ax.plot(sorted(thresholds)[:-1], tpr[:-1], "r-", label=r'$SigEff$')
+    Teff = tax.plot(sorted(thresholds)[:-1], tpr[:-1], "r-", label=r'$SigEff$') 
 
-    sig = ax.twinx()
-    signi = sig.plot(newthresholds, significance, "g-", label= r'$\frac{s}{\sqrt{s+b}}$')
+    fax = ax.twinx()
+    fxy = zip(fpr,thresholds)
+    fxy = sorted(fxy, key=lambda b:b[1],reverse=True)
+    fpr, thresholds = zip(*fxy)
+    Feff = fax.plot(sorted(thresholds)[:-1], fpr[:-1], "b-", label=r'$\frac{1}{BgEff}$')
     
+    fax.spines['right'].set_position(('axes',1.2))
+  
     ax.set_xlim(0,1.1)
-    ax.set_ylim(0,1.1)
-    sig.set_ylim(min(significance)*0.9, max(significance)*1.05)
+    tax.set_ylim(0,1.1)
+    fax.set_ylim(min(fpr),max(fpr)*1.05)
+    ax.set_ylim(min(significance)*0.9, max(significance)*1.05)
    
     ax.set_xlabel("cut value",fontsize=15)
-    ax.set_ylabel("Efficiency",fontsize=15)
-    sig.set_ylabel("Significance",fontsize=15) 
+    tax.set_ylabel("SigEff",fontsize=15)
+    fax.set_ylabel(r'$\frac{1}{BG Eff}$',fontsize=20)
+    ax.set_ylabel("Significance",fontsize=15) 
 
-    ax.yaxis.label.set_color(Feff[0].get_color())
-    #ax.yaxis.label.set_color(Teff[0].get_color())
-    sig.yaxis.label.set_color(signi[0].get_color())
+    tax.yaxis.label.set_color(Teff[0].get_color())
+    fax.yaxis.label.set_color(Feff[0].get_color())
+    ax.yaxis.label.set_color(signi[0].get_color())
      
-    ax.tick_params(axis='y' ,colors=Feff[0].get_color(), labelsize = 15)
     ax.tick_params(axis='x', labelsize = 15)
-    sig.tick_params(axis='y', colors=signi[0].get_color(), labelsize = 15) 
+    tax.tick_params(axis='y' ,colors=Teff[0].get_color(), labelsize = 15)
+    fax.tick_params(axis='y' ,colors=Feff[0].get_color(), labelsize = 15)
+    ax.tick_params(axis='y', colors=signi[0].get_color(), labelsize = 15) 
     
-    lines = [Feff[0],Teff[0],signi[0]]
+    lines = [Teff[0],Feff[0],signi[0]]
 
-    ax.legend(lines, [l.get_label() for l in lines], loc = 'upper left', fontsize=15)
-    ax.set_title('Significance and Efficiency',fontsize=20)
+    ax.legend(lines, [l.get_label() for l in lines], loc = 'lower right', fontsize=15)
+    ax.set_title('Significance and Efficiency B={}'.format(n),fontsize=20)
     
     plt.grid(True)
     fig.savefig("../plots/output/significant_B{}.pdf".format(n))
     plt.show()
-
 
 def CnnOutputs(outputs, labels, n):
     gamma = []
@@ -135,17 +140,18 @@ def CnnOutputs(outputs, labels, n):
                 
     fig, ax = plt.subplots(figsize=(6,6))
     bins = np.arange(0,1.05,0.05)
-    particle = 'gamma'
-    ax.set_title('CNN Outputs',fontsize=20)
-    ax.set_xlabel("sigmoid output",fontsize=15)
-    ghist = ax.hist(gamma,bins=bins,alpha=0.6,label=particle)
-
+    
     particle = 'proton'
     phist = ax.hist(proton,bins=bins,alpha=0.6,label=particle)
-    ax.legend(fontsize=15)
+    
+    particle = 'gamma'
+    ghist = ax.hist(gamma,bins=bins,alpha=0.6,label=particle)
+    
+    ax.set_title('CNN Outputs',fontsize=20)
+    ax.set_xlabel("sigmoid output",fontsize=15)
     ax.tick_params(axis = 'both', labelsize =15)
+    ax.legend(fontsize=15)
     
     plt.grid(True)
     fig.savefig("../plots/output/cnn_output_B{}.pdf".format(n))
-
     plt.show()
