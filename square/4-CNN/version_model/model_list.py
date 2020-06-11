@@ -215,3 +215,96 @@ class Model5(nn.Module):
         x = x.mean(dim=(2,3))
         return x
 
+class Model6(nn.Module):
+    def __init__(self):
+        super(Model6,self).__init__()
+        
+        self.layer1 =  nn.Sequential(
+            nn.Conv2d(4,32,3,bias=False),
+            nn.BatchNorm2d(32),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False),
+
+            nn.Conv2d(32,64,3, padding=(1, 1)),
+            nn.BatchNorm2d(64),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False),
+            
+            nn.Conv2d(64,128,3, padding=(1, 1)),
+            nn.BatchNorm2d(128),
+            nn.ReLU(inplace=True),
+            #nn.MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False),
+            
+            nn.Conv2d(128,256,3, padding=(1, 1)),
+            nn.BatchNorm2d(256),
+            nn.ReLU(inplace=True),
+            #nn.MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False),
+            
+            nn.Conv2d(256,256,3, padding=(1, 1)),
+            nn.BatchNorm2d(256),
+            nn.ReLU(inplace=True),
+            
+            nn.Conv2d(256,64,3, padding=(1, 1)),
+            nn.BatchNorm2d(64),
+            nn.ReLU(inplace=True),
+            
+            #nn.AdaptiveAvgPool2d(output_size=(1, 1))
+            )
+        
+        self.layer2 = nn.Sequential(
+            nn.Dropout(p=0.5, inplace=False),
+            nn.Conv2d(64,1,3)
+        )
+        
+    def forward(self, x):
+        x = self.layer1(x)
+        x = self.layer2(x)
+        x = x.mean(dim=(2,3))
+        return x
+
+class Model7(nn.Module):
+    def __init__(self):
+        super(Model7,self).__init__()
+        
+        self.layer1 =  nn.Sequential(
+            nn.Conv2d(4,32,3,bias=False),
+            nn.BatchNorm2d(32),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False),
+
+            nn.Conv2d(32,64,3, padding=(1, 1)),
+            nn.BatchNorm2d(64),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False),
+            
+            nn.Conv2d(64,128,3, padding=(1, 1)),
+            nn.BatchNorm2d(128),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False),
+            
+            nn.Conv2d(128,256,3, padding=(1, 1)),
+            nn.BatchNorm2d(256),
+            nn.ReLU(inplace=True),
+            nn.MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False),
+            
+            nn.Conv2d(256,512,3, padding=(1, 1)),
+            nn.BatchNorm2d(512),
+            nn.ReLU(inplace=True),
+            
+            nn.Conv2d(512,64,3, padding=(1, 1)),
+            nn.BatchNorm2d(64),
+            nn.ReLU(inplace=True),
+            
+            #nn.AdaptiveAvgPool2d(output_size=(1, 1))
+            )
+        
+        self.layer2 = nn.Sequential(
+            nn.Dropout(p=0.5, inplace=False),
+            nn.Conv2d(64,1,3)
+        )
+        
+    def forward(self, x):
+        x = self.layer1(x)
+        x = self.layer2(x)
+        x = x.mean(dim=(2,3))
+        return x

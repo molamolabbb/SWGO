@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.metrics import roc_curve, roc_auc_score, auc
 
-def plottingLossAcc(losses, accuracy, Eb, limitsloss, limitsacc, bestacc):
+def plottingLossAcc(losses, accuracy, Eb, limitsloss, limitsacc, bestacc, epoch):
   # plotting losses, and accuracy
     plt.figure(figsize=(6.5,4.5))
     plt.plot(range(1,len(losses['train'])+1),losses['train'], 'r',label='train')
@@ -14,7 +14,7 @@ def plottingLossAcc(losses, accuracy, Eb, limitsloss, limitsacc, bestacc):
     plt.tick_params(axis = 'both', labelsize =15)
     plt.axis(limitsloss)
     plt.grid(True)
-    plt.savefig("../plots/accloss/loss_B{}.pdf".format(Eb))
+    plt.savefig("../plots/accloss/loss_B{}.pdf".format(Eb),bbox_inches='tight')
     #plt.show()
 
     plt.figure(figsize=(6.5,4.5))
@@ -26,10 +26,10 @@ def plottingLossAcc(losses, accuracy, Eb, limitsloss, limitsacc, bestacc):
     plt.legend(fontsize=15,loc="lower right")
     plt.tick_params(axis = 'both', labelsize =15)
     plt.axis(limitsacc)
-    plt.text(50,0.58,'Accuracy : {}%'.format(bestacc), alpha=1,
+    plt.text(epoch/2,0.58,'Accuracy : {}%'.format(bestacc), alpha=1,
                 va="center", ha="center", fontsize=15)
     plt.grid(True)
-    plt.savefig("../plots/accloss/accuracy_B{}.pdf".format(Eb))
+    plt.savefig("../plots/accloss/accuracy_B{}.pdf".format(Eb),bbox_inches='tight')
     #plt.show()
 
 def roc(y,y_score,correct,total,Eb):
@@ -53,7 +53,7 @@ def roc(y,y_score,correct,total,Eb):
     ax.legend(loc="lower right",fontsize=15)
     t = ax.text(0.8, 0.15,'Accuracy : {}%'.format(100 * correct / total), alpha=1,
                  va="center", ha="center", size=15, transform=ax.transAxes)
-    fig.savefig("../plots/accloss/roc_B{}.pdf".format(Eb))
+    fig.savefig("../plots/accloss/roc_B{}.pdf".format(Eb),bbox_inches='tight')
     #plt.show()
     print('Accuracy of the network on the {} test images: {} %'.format(total, 100 * correct / total))
     return fpr,tpr, thresholds
@@ -99,15 +99,15 @@ def Draw_Eff_Sig(fpr, tpr, significance, thresholds, newthresholds, n):
     
     fax.spines['right'].set_position(('axes',1.2))
   
-    ax.set_xlim(0,1.1)
-    tax.set_ylim(0,1.1)
+    ax.set_xlim(-0.05,1.05)
+    tax.set_ylim(0,1.05)
     fax.set_ylim(min(fpr),max(fpr)*1.05)
     ax.set_ylim(min(significance)*0.9, max(significance)*1.05)
    
     ax.set_xlabel("cut value",fontsize=15)
-    tax.set_ylabel("SigEff",fontsize=15)
+    tax.set_ylabel(r"$SigEff$",fontsize=15)
     fax.set_ylabel(r'$\frac{1}{BG Eff}$',fontsize=20)
-    ax.set_ylabel("Significance",fontsize=15) 
+    ax.set_ylabel(r"$Significance$",fontsize=15) 
 
     tax.yaxis.label.set_color(Teff[0].get_color())
     fax.yaxis.label.set_color(Feff[0].get_color())
@@ -120,11 +120,11 @@ def Draw_Eff_Sig(fpr, tpr, significance, thresholds, newthresholds, n):
     
     lines = [Teff[0],Feff[0],signi[0]]
 
-    ax.legend(lines, [l.get_label() for l in lines], loc = 'lower right', fontsize=15)
+    ax.legend(lines, [l.get_label() for l in lines], loc = 'upper left', fontsize=15)
     ax.set_title('Significance and Efficiency B={}'.format(n),fontsize=20)
     
     plt.grid(True)
-    fig.savefig("../plots/output/significant_B{}.pdf".format(n))
+    fig.savefig("../plots/output/significant_B{}.pdf".format(n),bbox_inches='tight')
     plt.show()
 
 def CnnOutputs(outputs, labels, n):
@@ -153,5 +153,5 @@ def CnnOutputs(outputs, labels, n):
     ax.legend(fontsize=15)
     
     plt.grid(True)
-    fig.savefig("../plots/output/cnn_output_B{}.pdf".format(n))
+    fig.savefig("../plots/output/cnn_output_B{}.pdf".format(n),bbox_inches='tight')
     plt.show()
