@@ -287,11 +287,7 @@ class Model7(nn.Module):
             nn.ReLU(inplace=True),
             nn.MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False),
             
-            nn.Conv2d(256,512,3, padding=(1, 1)),
-            nn.BatchNorm2d(512),
-            nn.ReLU(inplace=True),
-            
-            nn.Conv2d(512,64,3, padding=(1, 1)),
+            nn.Conv2d(256,64,3, padding=(1, 1)),
             nn.BatchNorm2d(64),
             nn.ReLU(inplace=True),
             
