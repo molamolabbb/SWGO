@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.metrics import roc_curve, roc_auc_score, auc
 
-def plottingLossAcc(losses, accuracy, Eb, limitsloss, limitsacc, bestacc, epoch):
+def plottingLossAcc(losses, accuracy, Eb, limitsloss, limitsacc, bestacc, epoch, upperlower):
   # plotting losses, and accuracy
     plt.figure(figsize=(6.5,4.5))
     plt.plot(range(1,len(losses['train'])+1),losses['train'], 'r',label='train')
@@ -14,7 +14,7 @@ def plottingLossAcc(losses, accuracy, Eb, limitsloss, limitsacc, bestacc, epoch)
     plt.tick_params(axis = 'both', labelsize =15)
     plt.axis(limitsloss)
     plt.grid(True)
-    plt.savefig("../plots/accloss/loss_B{}.pdf".format(Eb),bbox_inches='tight')
+    plt.savefig("../plots/{}/accloss/loss_B{}.pdf".format(upperlower,Eb),bbox_inches='tight')
     #plt.show()
 
     plt.figure(figsize=(6.5,4.5))
@@ -29,10 +29,10 @@ def plottingLossAcc(losses, accuracy, Eb, limitsloss, limitsacc, bestacc, epoch)
     plt.text(epoch/2,0.58,'Accuracy : {}%'.format(bestacc), alpha=1,
                 va="center", ha="center", fontsize=15)
     plt.grid(True)
-    plt.savefig("../plots/accloss/accuracy_B{}.pdf".format(Eb),bbox_inches='tight')
+    plt.savefig("../plots/{}/accloss/accuracy_B{}.pdf".format(upperlower,Eb),bbox_inches='tight')
     #plt.show()
 
-def roc(y,y_score,correct,total,Eb):
+def roc(y,y_score,correct,total,Eb,upperlower):
     ny = y
     fpr,tpr, thresholds  = roc_curve(np.array(ny).ravel(),y_score.ravel())
     roc_auc = auc(fpr,tpr)
@@ -53,7 +53,7 @@ def roc(y,y_score,correct,total,Eb):
     ax.legend(loc="lower right",fontsize=15)
     t = ax.text(0.8, 0.15,'Accuracy : {}%'.format(100 * correct / total), alpha=1,
                  va="center", ha="center", size=15, transform=ax.transAxes)
-    fig.savefig("../plots/accloss/roc_B{}.pdf".format(Eb),bbox_inches='tight')
+    fig.savefig("../plots/{}/accloss/roc_B{}.pdf".format(upperlower,Eb),bbox_inches='tight')
     #plt.show()
     print('Accuracy of the network on the {} test images: {} %'.format(total, 100 * correct / total))
     return fpr,tpr, thresholds
@@ -79,7 +79,7 @@ def Significance(thresholds, outputs, labels):
         newthreshold.append(t)
     return newthreshold, significance
 
-def Draw_Eff_Sig(fpr, tpr, significance, thresholds, newthresholds, n):
+def Draw_Eff_Sig(fpr, tpr, significance, thresholds, newthresholds, n, upperlower):
     
     fig, ax = plt.subplots(figsize=(6,6))
     
@@ -89,13 +89,13 @@ def Draw_Eff_Sig(fpr, tpr, significance, thresholds, newthresholds, n):
     txy = zip(tpr,thresholds)
     txy = sorted(txy, key=lambda b:b[1],reverse=True)
     tpr, thresholds = zip(*txy)
-    Teff = tax.plot(sorted(thresholds)[:-1], tpr[:-1], "r-", label=r'$SigEff$') 
+    Teff = tax.plot(sorted(thresholds)[:-1], tpr[:-1], "r-", label=r'$\epsilon_{S}$') 
 
     fax = ax.twinx()
     fxy = zip(fpr,thresholds)
     fxy = sorted(fxy, key=lambda b:b[1],reverse=True)
     fpr, thresholds = zip(*fxy)
-    Feff = fax.plot(sorted(thresholds)[:-1], fpr[:-1], "b-", label=r'$\frac{1}{BgEff}$')
+    Feff = fax.plot(sorted(thresholds)[:-1], fpr[:-1], "b-", label=r'$1/\epsilon_{B}$')
     
     fax.spines['right'].set_position(('axes',1.2))
   
@@ -105,8 +105,8 @@ def Draw_Eff_Sig(fpr, tpr, significance, thresholds, newthresholds, n):
     ax.set_ylim(min(significance)*0.9, max(significance)*1.05)
    
     ax.set_xlabel("cut value",fontsize=15)
-    tax.set_ylabel(r"$SigEff$",fontsize=15)
-    fax.set_ylabel(r'$\frac{1}{BG Eff}$',fontsize=20)
+    tax.set_ylabel(r"$\epsilon_{S}$",fontsize=15)
+    fax.set_ylabel(r'$1/\epsilon_{B}$',fontsize=20)
     ax.set_ylabel(r"$Significance$",fontsize=15) 
 
     tax.yaxis.label.set_color(Teff[0].get_color())
@@ -124,10 +124,10 @@ def Draw_Eff_Sig(fpr, tpr, significance, thresholds, newthresholds, n):
     ax.set_title('Significance and Efficiency B={}'.format(n),fontsize=20)
     
     plt.grid(True)
-    fig.savefig("../plots/output/significant_B{}.pdf".format(n),bbox_inches='tight')
+    fig.savefig("../plots/{}/output/significant_B{}.pdf".format(upperlower,n),bbox_inches='tight')
     plt.show()
 
-def CnnOutputs(outputs, labels, n):
+def CnnOutputs(outputs, labels, n, upperlower):
     gamma = []
     proton = []
 
@@ -147,11 +147,29 @@ def CnnOutputs(outputs, labels, n):
     particle = 'gamma'
     ghist = ax.hist(gamma,bins=bins,alpha=0.6,label=particle)
     
-    ax.set_title('CNN Outputs',fontsize=20)
+    ax.set_title('CNN Outputs B={}'.format(n),fontsize=20)
     ax.set_xlabel("sigmoid output",fontsize=15)
     ax.tick_params(axis = 'both', labelsize =15)
     ax.legend(fontsize=15)
     
     plt.grid(True)
-    fig.savefig("../plots/output/cnn_output_B{}.pdf".format(n),bbox_inches='tight')
+    fig.savefig("../plots/{}/output/cnn_output_B{}.pdf".format(upperlower, n),bbox_inches='tight')
     plt.show()
+
+def plottingEff(tpr, fpr, upperlower):
+    x = []
+    y = []
+    for t, f in zip(tpr, fpr):
+        if f==0:continue
+        x.append(t)
+        y.append(1/f)
+    fig, ax = plt.subplots(figsize=(6,6))
+    ax.set_title('Sequence of ROC curves', fontsize=20)
+    ax.set_ylabel(r'$1/\epsilon_{B}$',fontsize=20)
+    ax.set_xlabel(r'$\epsilon_{S}$',fontsize=20)
+    ax.tick_params(axis='both', labelsize=15)
+    ax.plot(x, y)
+    plt.yscale('log')
+    fig.savefig("../plots/{}/efficiency/sequenceROC.pdf".format(upperlower),bbox_inches='tight')
+    plt.show()
+
