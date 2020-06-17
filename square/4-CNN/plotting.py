@@ -106,7 +106,7 @@ def Draw_Eff_Sig(fpr, tpr, significance, thresholds, newthresholds, n, upperlowe
    
     ax.set_xlabel("cut value",fontsize=15)
     tax.set_ylabel(r"$\epsilon_{S}$",fontsize=15)
-    fax.set_ylabel(r'$1/\epsilon_{B}$',fontsize=20)
+    fax.set_ylabel(r'$1/\epsilon_{B}$',fontsize=15)
     ax.set_ylabel(r"$Significance$",fontsize=15) 
 
     tax.yaxis.label.set_color(Teff[0].get_color())
@@ -117,7 +117,7 @@ def Draw_Eff_Sig(fpr, tpr, significance, thresholds, newthresholds, n, upperlowe
     tax.tick_params(axis='y' ,colors=Teff[0].get_color(), labelsize = 15)
     fax.tick_params(axis='y' ,colors=Feff[0].get_color(), labelsize = 15)
     ax.tick_params(axis='y', colors=signi[0].get_color(), labelsize = 15) 
-    
+    fax.set_yscale('log') 
     lines = [Teff[0],Feff[0],signi[0]]
 
     ax.legend(lines, [l.get_label() for l in lines], loc = 'upper left', fontsize=15)
